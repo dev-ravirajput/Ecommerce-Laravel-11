@@ -284,6 +284,113 @@ class AdminController extends Controller
         return redirect()->route('admin.products')->with('status', 'Product Added Successfully!');
     }
 
+
+    public function editProduct($id)
+    {
+
+    $categories = Category::all();
+    $brands = Brand::all();
+    $product = Product::find($id);
+    return view('admin.product-edit', compact('categories', 'brands', 'product'));
+
+    }
+
+
+    public function product_update(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:products,slug,' . $request->id,
+            'category_id' => 'required',
+            'brand_id' => 'required',
+            'short_description' => 'required',
+            'description' => 'required',
+            'regular_price' => 'required',
+            'sale_price' => 'required',
+            'SKU' => 'required',
+            'stock_status' => 'required',
+            'featured' => 'required',
+            'quantity' => 'required',
+            'images.*' => 'mimes:png,jpg,jpeg|max:2048',
+            'image' => 'mimes:png,jpg,jpeg:max:2048',
+        ]);
+
+        $product = Product::find($request->id);
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->slug);
+        $product->category_id = $request->category_id;
+        $product->brand_id = $request->brand_id;
+        $product->short_description = $request->short_description;
+        $product->description = $request->description;
+        $product->regular_price = $request->regular_price;
+        $product->sale_price = $request->sale_price;
+        $product->SKU = $request->SKU;
+        $product->stock_status = $request->stock_status;
+        $product->featured = $request->featured;
+        $product->quantity = $request->quantity;
+        
+        if($request->hasFile('image'))
+        {
+            if(File::exists(public_path('uploads/products/thumbnails'.$product->image)))
+            {
+               File::delete(public_path('uploads/products/thumbnails'.$product->image));
+            }
+            if(File::exists(public_path('uploads/products/'.$product->image)))
+            {
+               File::delete(public_path('uploads/products/'.$product->image));
+            }
+
+        $image = $request->file('image');
+        $file_extension = $request->file('image')->extension();
+        $filename = Carbon::now()->timestamp.'.'.$file_extension;
+        $this->GenerateProductThumbnail($image, $filename);
+        $product->image = $filename; 
+
+        }
+        
+
+        $gallery_arr = array();
+        $gallery_images = "";
+        $counter = 1;
+        $currentTimestamp = Carbon::now()->format('Ymd_His');
+
+        if($request->hasFile('images'))
+        {
+            foreach(explode($product->images) as $ofile)
+            {
+                if(File::exists(public_path('uploads/products/'.$ofile)))
+                {
+                    File::delete(public_path('uploads/products/'.$ofile));
+                }
+                if(File::exists(public_path('uploads/products/thumbnails'.$ofile)))
+                {
+                    File::delete(public_path('uploads/products/thumbnails'.$ofile));
+                }
+
+            }
+
+            $allowedExtentions = ['jpg', 'png', 'jpeg'];
+            $files = $request->file('images');
+            foreach ($files as $file)
+             {
+                $gextension = $file->getClientOriginalExtension();
+                $gcheck = in_array($gextension, $allowedExtentions);
+                if($gcheck)
+                {
+                    $gfileName = $currentTimestamp.'-'.$counter.'.'.$gextension;
+                    $this->GenerateProductThumbnail($file, $gfileName);
+                    array_push($gallery_arr, $gfileName);
+                    $counter = $counter + 1;
+                }
+            }
+            $gallery_images = implode(',', $gallery_arr);
+        }
+        $product->images = $gallery_images; 
+        $product->save();
+
+        return redirect()->route('admin.products')->with('status', 'Product Updated Successfully!');
+    }
+
        public function GenerateProductThumbnail($image, $imagename)
        {
         $destinationPathThumbnails = public_path('uploads/products/thumbnails');

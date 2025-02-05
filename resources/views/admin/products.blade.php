@@ -68,7 +68,7 @@
                                                             <div class="text-tiny mt-3">{{ $product->slug }}</div>
                                                         </div>
                                                     </td>
-                                                    <td>${{ $product->ragular_price }}</td>
+                                                    <td>${{ $product->regular_price }}</td>
                                                     <td>${{ $product->sale_price }}</td>
                                                     <td>{{ $product->SKU }}</td>
                                                     <td>{{ $product->category->name }}</td>
@@ -83,7 +83,7 @@
                                                                     <i class="icon-eye"></i>
                                                                 </div>
                                                             </a>
-                                                            <a href="#">
+                                                            <a href="{{ route('admin.product.edit', $product->id) }}">
                                                                 <div class="item edit">
                                                                     <i class="icon-edit-3"></i>
                                                                 </div>
