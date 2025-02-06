@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
 use App\Http\Middleware\Authadmin;
 
 
@@ -12,6 +14,11 @@ use App\Http\Middleware\Authadmin;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/shop',[ShopController::class, 'index'])->name('shop');
+Route::get('/shop/{product_slug}',[ShopController::class, 'product_details'])->name('product.details');
+
+Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add',[CartController::class, 'add_to_cart'])->name('cart.add');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard',[UserController::class, 'index'])->name('user.index');
@@ -38,4 +45,5 @@ Route::middleware(['auth', Authadmin::class])->group(function(){
     Route::post('admin/product/store',[AdminController::class, 'product_store'])->name('admin.product.store');
     Route::get('admin/product/{id}/edit',[AdminController::class, 'editProduct'])->name('admin.product.edit');
     Route::put('admin/product/update',[AdminController::class, 'product_update'])->name('admin.product.update');
+    Route::delete('admin/product/{id}/delete',[AdminController::class, 'product_delete'])->name('admin.product.delete');
 });

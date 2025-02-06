@@ -58,7 +58,7 @@
                                             <tbody>
                                             	@foreach($products as $product)
                                                 <tr>
-                                                    <td>6</td>
+                                                    <td>{{ $loop->iteration }}</td>
                                                     <td class="pname">
                                                         <div class="image">
                                                             <img src="{{ asset('uploads/products/thumbnails/'.$product->image) }}" alt="{{ $product->name }}" class="image">
@@ -88,7 +88,9 @@
                                                                     <i class="icon-edit-3"></i>
                                                                 </div>
                                                             </a>
-                                                            <form action="#" method="POST">
+                                                            <form action="{{ route('admin.product.delete', $product->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
                                                                 <div class="item text-danger delete">
                                                                     <i class="icon-trash-2"></i>
                                                                 </div>
@@ -109,3 +111,25 @@
                             </div>
                         </div>
 @endsection
+@push('scripts')
+<script >
+    $(function(){
+        $('.delete').on('click',function(){
+            var form = $(this).closest('form');
+
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted you will not able to recover this data.",
+                icon: "warning",
+                buttons: ["No", "Yes"],
+                confirmButtonColor: "#dc3545",
+                showLoaderOnConfirm: 'yes'
+            }).then(function(result){
+                if(result){
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
