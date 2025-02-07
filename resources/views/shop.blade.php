@@ -148,50 +148,19 @@
             <div id="accordion-filter-brand" class="accordion-collapse collapse show border-0"
               aria-labelledby="accordion-heading-brand" data-bs-parent="#brand-filters">
               <div class="search-field multi-select accordion-body px-0 pb-0">
-                <select class="d-none" multiple name="total-numbers-list">
-                  <option value="1">Adidas</option>
-                  <option value="2">Balmain</option>
-                  <option value="3">Balenciaga</option>
-                  <option value="4">Burberry</option>
-                  <option value="5">Kenzo</option>
-                  <option value="5">Givenchy</option>
-                  <option value="5">Zara</option>
-                </select>
-                <div class="search-field__input-wrapper mb-3">
-                  <input type="text" name="search_text"
-                    class="search-field__input form-control form-control-sm border-light border-2"
-                    placeholder="Search" />
-                </div>
-                <ul class="multi-select__list list-unstyled">
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Adidas</span>
-                    <span class="text-secondary">2</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Balmain</span>
-                    <span class="text-secondary">7</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Balenciaga</span>
-                    <span class="text-secondary">10</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Burberry</span>
-                    <span class="text-secondary">39</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Kenzo</span>
-                    <span class="text-secondary">95</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Givenchy</span>
-                    <span class="text-secondary">1092</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Zara</span>
-                    <span class="text-secondary">48</span>
-                  </li>
-                </ul>
+               <ul class="list list-inline mb-0 brand-list">
+                 @foreach($brands as $brand)
+                   <li class="list-item">
+                     <span class="menu-link py-1">
+                       <input type="checkbox" name="brands" value="{{ $brand->id }}" class="chk-brand"  {{ in_array($brand->id, explode(',', $f_brands ?? '')) ? 'checked' : '' }}>
+                       {{ $brand->name }}
+                     </span>
+                     <span class="text-right float-end">
+                       {{ $brand->products->count() }}
+                     </span>
+                   </li>
+                 @endforeach
+               </ul>
               </div>
             </div>
           </div>
@@ -326,17 +295,20 @@
           </div>
 
           <div class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Sort Items"
-              name="total-number">
-              <option selected>Default Sorting</option>
-              <option value="1">Featured</option>
-              <option value="2">Best selling</option>
-              <option value="3">Alphabetically, A-Z</option>
-              <option value="3">Alphabetically, Z-A</option>
-              <option value="3">Price, low to high</option>
-              <option value="3">Price, high to low</option>
-              <option value="3">Date, old to new</option>
-              <option value="3">Date, new to old</option>
+            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0 mx-2" aria-label="Page Size" id="pageSize" name="page-size">
+              <option value="12" {{ $size == 12 ? 'selected': '' }}>Show</option>
+              <option value="24" {{ $size == 24 ? 'selected': '' }}>24</option>
+              <option value="50" {{ $size == 50 ? 'selected': '' }}>50</option>
+              <option value="80" {{ $size == 80 ? 'selected': '' }}>80</option>
+              <option value="100" {{ $size == 100 ? 'selected': '' }}>100</option>
+            </select>
+
+            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0 mx-2" aria-label="Data Order" id="orderBy" name="orderBy">
+              <option value="-1" {{ $order == -1 ? 'selected': '' }}>Default</option>
+              <option value="1" {{ $order == 1 ? 'selected': '' }}>Date, New To OLd</option>
+              <option value="2" {{ $order == 2 ? 'selected': '' }}>Date, Old To New</option>
+              <option value="3" {{ $order == 3 ? 'selected': '' }}>Price, Low To High</option>
+              <option value="4" {{ $order == 4 ? 'selected': '' }}>Price, High To Low</option>
             </select>
 
             <div class="shop-asc__seprator mx-3 bg-light d-none d-md-block order-md-0"></div>
@@ -391,9 +363,22 @@
                       <use href="#icon_next_sm" />
                     </svg></span>
                 </div>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
+
+                @if(Cart::instance('cart')->content()->where('id', $product->id)->count()>0)
+                 <a href="{{ route('cart.index') }}" class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium ">Go to Cart</a>
+                 @else
+                 <form action="{{ route('cart.add') }}" method="post">
+            @csrf
+            @method('POST')
+                <input type="hidden" name="id" value="{{ $product->id }}">
+                <input type="hidden" name="name" value="{{ $product->name }}">
+                <input type="hidden" name="price" value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
+                <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
+                <button type="submit" 
+                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium"
                   data-aside="cartDrawer" title="Add To Cart">Add To Cart</button>
+
+                @endif
               </div>
 
               <div class="pc__info position-relative">
@@ -442,10 +427,55 @@
 
         <div class="divider">
         	<div class="flex items-center justify-content-between flex-wrap gap10 wgp-pagination">
-        		{{ $products->links('pagination::bootstrap-5') }}
+        		{{ $products->withQueryString()->links('pagination::bootstrap-5') }}
         	</div>
         </div>
       </div>
     </section>
   </main>
+
+<form id="filterFormSubmit" method="GET" action="{{ route('shop') }}">
+    <input type="hidden" name="page" value="{{ $products->currentPage() }}">
+    <input type="hidden" id="size" name="size" value="{{ $size }}">
+    <input type="hidden" id="order" name="orderBy" value="{{ $order }}">
+    <input type="hidden" id="product-brands" name="brands">
+</form>
+
 @endsection
+@push('scripts')
+<script>
+  $(document).ready(function() {
+    let shopUrl = "{{ route('shop') }}";
+    let page = "{{ $products->currentPage() }}";
+    let currentSize = "{{ $size }}"; 
+    let currentOrder = "{{ request('order') }}"; 
+
+    // Change Page Size
+    $('#pageSize').on('change', function() {
+      let size = $(this).val();
+      window.location.href = shopUrl + "?page=" + page + "&size=" + size + "&order=" + currentOrder;
+    });
+
+    // Change Sorting Order
+    $('#orderBy').on('change', function() {
+      let order = $(this).val();
+      window.location.href = shopUrl + "?page=" + page + "&size=" + currentSize + "&order=" + order;
+    });
+
+    // Filter by Brand Selection
+    $("input[name='brands']").on('change', function() {
+      let brands = []; 
+      
+      $("input[name='brands']:checked").each(function() {
+        brands.push($(this).val());
+      });
+
+      let brandQuery = brands.length > 0 ? "&brands=" + brands.join(",") : "";
+
+      // Redirect with all parameters
+      window.location.href = shopUrl + "?page=" + page + "&size=" + currentSize + "&order=" + currentOrder + brandQuery;
+    });
+
+  });
+</script>
+@endpush
