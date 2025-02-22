@@ -78,7 +78,7 @@
                                                     <td>{{ $product->quantity }}</td>
                                                     <td>
                                                         <div class="list-icon-function">
-                                                            <a href="#" target="_blank">
+                                                            <a href="{{ route('product.details', $product->slug) }}" target="_blank">
                                                                 <div class="item eye">
                                                                     <i class="icon-eye"></i>
                                                                 </div>

@@ -29,6 +29,11 @@ Route::post('wishlist/add', [WishlistController::class, 'add_to_wishlist'])->nam
 Route::get('wishlist', [WishlistController::class, 'index'])->name('go.to.wishlist');
 Route::delete('wishlist/{id}/remove', [WishlistController::class, 'remove_to_wishlist'])->name('remove.to.wishlist');
 Route::delete('wishlist/clear', [WishlistController::class, 'empty_wishlist'])->name('empty.wishlist');
+Route::post('wishlist/{id}/move-to-cart', [WishlistController::class, 'move_to_cart'])->name('wishlist.move.to.cart');
+
+Route::post('cart/apply-coupon', [CartController::class, 'apply_coupon_code'])->name('apply.coupon');
+Route::delete('cart/remove-coupon', [CartController::class, 'remove_coupon_code'])->name('remove.coupon');
+
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard',[UserController::class, 'index'])->name('user.index');
@@ -56,4 +61,11 @@ Route::middleware(['auth', Authadmin::class])->group(function(){
     Route::get('admin/product/{id}/edit',[AdminController::class, 'editProduct'])->name('admin.product.edit');
     Route::put('admin/product/update',[AdminController::class, 'product_update'])->name('admin.product.update');
     Route::delete('admin/product/{id}/delete',[AdminController::class, 'product_delete'])->name('admin.product.delete');
+
+    Route::get('admin/coupons',[AdminController::class, 'coupons'])->name('admin.coupons');
+    Route::get('admin/coupons/create',[AdminController::class, 'add_coupons'])->name('admin.coupons.add');
+    Route::post('admin/coupons/store',[AdminController::class, 'store_coupons'])->name('admin.coupons.store');
+    Route::get('admin/coupons/{id}/edit',[AdminController::class, 'edit_coupons'])->name('admin.coupons.edit');
+    Route::post('admin/coupons/update',[AdminController::class, 'update_coupons'])->name('admin.coupons.update');
+    Route::delete('admin/coupon/{id}/delete',[AdminController::class, 'delete_coupons'])->name('admin.coupons.delete');
 });

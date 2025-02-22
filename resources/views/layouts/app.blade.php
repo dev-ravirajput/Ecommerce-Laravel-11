@@ -258,6 +258,10 @@
       max-width: 220px;
     }
   </style>
+@php
+  $f_categories = DB::table('categories')->latest()->take(4)->get();
+@endphp
+
   <div class="header-mobile header_sticky">
     <div class="container d-flex align-items-center h-100">
       <a class="mobile-nav-activator d-block position-relative" href="#">
@@ -519,9 +523,9 @@
               <img src="{{ asset('images/logo/ShopNGo.png') }}" alt="SurfsideMedia" class="logo__image d-block" />
             </a>
           </div>
-          <p class="footer-address">123 Beach Avenue, Surfside City, CA 00000</p>
-          <p class="m-0"><strong class="fw-medium">contact@surfsidemedia.in</strong></p>
-          <p><strong class="fw-medium">+1 000-000-0000</strong></p>
+          <p class="footer-address">Karanpur Muvaiyya, Lakhimpur Kheri, 262701</p>
+          <p class="m-0"><strong class="fw-medium">dev.ravirajput@gmail.com</strong></p>
+          <p><strong class="fw-medium">+91 9026494238</strong></p>
 
           <ul class="social-links list-unstyled d-flex flex-wrap mb-0">
             <li>
@@ -606,11 +610,10 @@
         <div class="footer-column footer-menu mb-4 mb-lg-0">
           <h6 class="sub-menu__title text-uppercase">Categories</h6>
           <ul class="sub-menu__list list-unstyled">
-            <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Shirts</a></li>
-            <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Jeans</a></li>
-            <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Shoes</a></li>
-            <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Bags</a></li>
-            <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Shop All</a></li>
+            @foreach($f_categories as $f_cat)
+            <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">{{ $f_cat->name }}</a></li>
+            @endforeach
+            <li class="sub-menu__item"><a href="{{ route('shop') }}" class="menu-link menu-link_us-s">Shop All</a></li>
           </ul>
         </div>
       </div>
@@ -618,7 +621,7 @@
 
     <div class="footer-bottom">
       <div class="container d-md-flex align-items-center">
-        <span class="footer-copyright me-auto">©2024 Surfside Media</span>
+        <span class="footer-copyright me-auto">©2025 Ravi Rajpoot</span>
         <div class="footer-settings d-md-flex align-items-center">
           <a href="privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms-conditions.html">Terms &amp;
             Conditions</a>

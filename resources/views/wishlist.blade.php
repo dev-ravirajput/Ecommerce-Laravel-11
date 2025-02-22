@@ -43,7 +43,15 @@
                 {{ $item->qty }} 
                 </td>
                 <td>
-                  <form action="{{ route('remove.to.wishlist', $item->rowId) }}" method="POST" id="wishlist-form-{{ $item->rowId }}">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <form action="{{ route('wishlist.move.to.cart', $item->rowId) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-warning">Move to Cart</button>
+                  </form>
+                    </div>
+                    <div class="col-md-6">
+                    <form action="{{ route('remove.to.wishlist', $item->rowId) }}" method="POST" id="wishlist-form-{{ $item->rowId }}">
                     @csrf
                     @method('DELETE')
                   <a href="javascript::void(0)" class="remove-cart" onclick="document.getElementById('wishlist-form-{{ $item->rowId }}').submit()">
@@ -53,6 +61,8 @@
                     </svg>
                   </a>
                   </form> 
+                    </div>
+                  </div>
                 </td>
                 @endforeach
               </tr>
