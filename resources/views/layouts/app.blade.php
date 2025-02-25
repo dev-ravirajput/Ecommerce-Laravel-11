@@ -277,11 +277,13 @@
         </a>
       </div>
 
-      <a href="#" class="header-tools__item header-tools__cart js-open-aside" data-aside="cartDrawer">
+      <a href="{{ route('cart.index') }}" class="header-tools__item header-tools__cart" data-aside="cartDrawer">
         <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <use href="#icon_cart" />
         </svg>
-        <span class="cart-amount d-block position-absolute js-cart-items-count">3</span>
+        @if(Cart::instance('cart')->content()->count() > 0)
+            <span class="cart-amount d-block position-absolute js-cart-items-count">{{ Cart::instance('cart')->content()->count() }}</span>
+            @endif
       </a>
     </div>
 
@@ -320,25 +322,38 @@
               <a href="{{ route('cart.index') }}" class="navigation__link">Cart</a>
             </li>
             <li class="navigation__item">
-              <a href="about.html" class="navigation__link">About</a>
+              <a href="#" class="navigation__link">About</a>
             </li>
             <li class="navigation__item">
-              <a href="contact.html" class="navigation__link">Contact</a>
+              <a href="#" class="navigation__link">Contact</a>
             </li>
           </ul>
         </div>
       </div>
 
       <div class="border-top mt-auto pb-2">
+        @guest
         <div class="customer-links container mt-4 mb-2 pb-1">
+          <a href="{{ route('login') }}">
           <svg class="d-inline-block align-middle" width="20" height="20" viewBox="0 0 20 20" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <use href="#icon_user" />
           </svg>
+          </a>
           <span class="d-inline-block ms-2 text-uppercase align-middle fw-medium">My Account</span>
         </div>
+          @else
+          <div class="customer-links container mt-4 mb-2 pb-1">
+            <a href="{{ Auth::user()->utype == 'ADM' ? route('admin.index'): route('user.index')  }}">
+          <svg class="d-inline-block align-middle" width="20" height="20" viewBox="0 0 20 20" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <use href="#icon_user" />
+          </svg>
+            </a>
+          <span class="d-inline-block ms-2 text-uppercase align-middle fw-medium">{{ Auth::user()->name }}</span>
+        </div>
 
-
+          @endguest
 
         <ul class="container social-links list-unstyled d-flex flex-wrap mb-0">
           <li>
@@ -644,7 +659,7 @@
       </div>
 
       <div class="col-4">
-        <a href="index.html" class="footer-mobile__link d-flex flex-column align-items-center">
+        <a href="{{ route('shop') }}" class="footer-mobile__link d-flex flex-column align-items-center">
           <svg class="d-block" width="18" height="18" viewBox="0 0 18 18" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <use href="#icon_hanger" />
@@ -654,13 +669,15 @@
       </div>
 
       <div class="col-4">
-        <a href="index.html" class="footer-mobile__link d-flex flex-column align-items-center">
+        <a href="{{ route('go.to.wishlist') }}" class="footer-mobile__link d-flex flex-column align-items-center">
           <div class="position-relative">
             <svg class="d-block" width="18" height="18" viewBox="0 0 20 20" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <use href="#icon_heart" />
             </svg>
-            <span class="wishlist-amount d-block position-absolute js-wishlist-count">3</span>
+            @if(Cart::instance('wishlist')->content()->count() >0)
+            <span class="cart-amount d-block position-absolute js-cart-items-count">{{ Cart::instance('wishlist')->content()->count() }}</span>
+            @endif
           </div>
           <span>Wishlist</span>
         </a>
