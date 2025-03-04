@@ -273,7 +273,7 @@
 
       <div class="logo">
         <a href="{{ route('home.index') }}">
-          <img src="{{ asset('images/logo/ShopNGo.png') }}" alt="Uomo" class="logo__image d-block" />
+          <img src="{{ asset('images/logo/shopngo-new.png') }}" alt="Uomo" class="logo__image d-block" />
         </a>
       </div>
 
@@ -357,7 +357,7 @@
 
         <ul class="container social-links list-unstyled d-flex flex-wrap mb-0">
           <li>
-            <a href="#" class="footer__social-link d-block ps-0">
+            <a href="https://www.facebook.com/people/Ravi-Rajput/100026887834468" class="footer__social-link d-block ps-0">
               <svg class="svg-icon svg-icon_facebook" width="9" height="15" viewBox="0 0 9 15"
                 xmlns="http://www.w3.org/2000/svg">
                 <use href="#icon_facebook" />
@@ -408,7 +408,7 @@
       <div class="header-desk header-desk_type_1">
         <div class="logo">
           <a href="{{ route('home.index') }}">
-            <img src="{{ asset('images/logo/ShopNGo.png') }}" alt="Uomo" class="logo__image d-block" />
+            <img src="{{ asset('images/logo/shopngo-new.png') }}" alt="Uomo" class="logo__image d-block" />
           </a>
         </div>
 
@@ -535,7 +535,7 @@
         <div class="footer-column footer-store-info col-12 mb-4 mb-lg-0">
           <div class="logo">
             <a href="{{ route('home.index') }}">
-              <img src="{{ asset('images/logo/ShopNGo.png') }}" alt="SurfsideMedia" class="logo__image d-block" />
+              <img src="{{ asset('images/logo/shopngo-new-white.png') }}" alt="SurfsideMedia" class="logo__image d-block" />
             </a>
           </div>
           <p class="footer-address">Karanpur Muvaiyya, Lakhimpur Kheri, 262701</p>
@@ -544,7 +544,7 @@
 
           <ul class="social-links list-unstyled d-flex flex-wrap mb-0">
             <li>
-              <a href="#" class="footer__social-link d-block">
+              <a href="https://www.facebook.com/people/Ravi-Rajput/100026887834468/" class="footer__social-link d-block">
                 <svg class="svg-icon svg-icon_facebook" width="9" height="15" viewBox="0 0 9 15"
                   xmlns="http://www.w3.org/2000/svg">
                   <use href="#icon_facebook" />

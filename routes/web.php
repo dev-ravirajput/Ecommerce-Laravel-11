@@ -36,6 +36,12 @@ Route::delete('cart/remove-coupon', [CartController::class, 'remove_coupon_code'
 
 Route::get('checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
+Route::post('/place-an-order', [CartController::class, 'place_an_order'])->name('cart.place.an.order');
+
+Route::get('/order/confirmation', [CartController::class, 'order_confirmation'])->name('cart.order.confirmation');
+
+
+
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard',[UserController::class, 'index'])->name('user.index');

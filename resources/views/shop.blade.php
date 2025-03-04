@@ -18,7 +18,7 @@
 </style>
 <main class="pt-90">
     <section class="shop-main container d-flex pt-4 pt-xl-5">
-      <div class="shop-sidebar side-sticky bg-body" id="shopFilter">
+      <div class="shop-sidebar side-sticky" id="shopFilter">
         <div class="aside-header d-flex d-lg-none align-items-center">
           <h3 class="text-uppercase fs-6 mb-0">Filter By</h3>
           <button class="btn-close-lg js-close-aside btn-close-aside ms-auto"></button>
@@ -327,9 +327,9 @@
           </div>
         </div>
 
-        <div class="products-grid row row-cols-2 row-cols-md-3" id="products-grid">
+        <div class="products-grid row row-cols-2 row-cols-md-4" id="products-grid">
         @foreach($products as $product)
-          <div class="product-card-wrapper">
+          <div class="product-card-wrapper mx-1 my-1">
             <div class="product-card mb-3 mb-md-4 mb-xxl-5">
               <div class="pc__img-wrapper">
                 <div class="swiper-container background-img js-swiper-slider" data-settings='{"resizeObserver": true}'>
@@ -360,7 +360,7 @@
                 </div>
 
                 @if(Cart::instance('cart')->content()->where('id', $product->id)->count()>0)
-                 <a href="{{ route('cart.index') }}" class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium ">Go to Cart</a>
+                 <a href="{{ route('cart.index') }}" class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium custom-btn">Go to Cart</a>
                  @else
                  <form action="{{ route('cart.add') }}" method="post">
             @csrf
@@ -370,7 +370,7 @@
                 <input type="hidden" name="price" value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
                 <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
                 <button type="submit" 
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium"
+                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium custom-btn"
                   data-aside="cartDrawer" title="Add To Cart">Add To Cart</button>
 
                 @endif
