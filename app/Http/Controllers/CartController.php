@@ -127,7 +127,7 @@ class CartController extends Controller
     }
 
     public function place_an_order(Request $request)
-    {
+    { //dd($request->all());
         $userId = Auth::user()->id;
         $address = Address::where('user_id', $userId)->where('isdefault', true)->first();
 
